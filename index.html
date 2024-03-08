@@ -1,0 +1,47 @@
+<head>
+  <script>
+    window.addEventListener("DOMContentLoaded", (event) => {
+      document
+        .getElementById("cardInput")
+        .addEventListener("input", function () {
+          var selectedCard = this.value.toLowerCase();
+          var cardImage = document.getElementById("cardImage");
+
+          switch (selectedCard) {
+            case "cirdan the shipwright":
+              cardImage.src = "../images/cirdan-the-shipwright.jpg";
+              break;
+            case "elrond of the white council":
+              cardImage.src = "../images/elrond-of-the-white-council.jpg";
+              break;
+            case "mob verdict":
+              cardImage.src = "../images/mob-verdict.jpg";
+              break;
+            case "trap the trespassers":
+              cardImage.src = "../images/trap-the-trespassers.jpg";
+              break;
+            case "truth or consequences":
+              cardImage.src = "../images/truth-or-consequences.jpg";
+              break;
+            default:
+              cardImage.src = "";
+              break;
+          }
+        });
+    });
+  </script>
+</head>
+<body>
+  <input list="cards" id="cardInput" />
+  <datalist id="cards">
+    <option value="Truth or Consequences"></option>
+    <option value="Trap the Trespassers"></option>
+    <option value="Mob Verdict"></option>
+    <option value="Elrond of the White Council"></option>
+    <option value="Cirdan the Shipwright"></option>
+  </datalist>
+
+  <div id="cardImageContainer">
+    <img src="" alt="" id="cardImage" />
+  </div>
+</body>
