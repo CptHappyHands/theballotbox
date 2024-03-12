@@ -1,47 +1,102 @@
-<head>
-  <script>
-    window.addEventListener("DOMContentLoaded", (event) => {
-      document
-        .getElementById("cardInput")
-        .addEventListener("input", function () {
-          var selectedCard = this.value.toLowerCase();
-          var cardImage = document.getElementById("cardImage");
-
-          switch (selectedCard) {
-            case "cirdan the shipwright":
-              cardImage.src = "../images/cirdan-the-shipwright.jpg";
-              break;
-            case "elrond of the white council":
-              cardImage.src = "../images/elrond-of-the-white-council.jpg";
-              break;
-            case "mob verdict":
-              cardImage.src = "../images/mob-verdict.jpg";
-              break;
-            case "trap the trespassers":
-              cardImage.src = "../images/trap-the-trespassers.jpg";
-              break;
-            case "truth or consequences":
-              cardImage.src = "../images/truth-or-consequences.jpg";
-              break;
-            default:
-              cardImage.src = "";
-              break;
-          }
-        });
-    });
-  </script>
-</head>
+<head> </head>
 <body>
-  <input list="cards" id="cardInput" />
-  <datalist id="cards">
-    <option value="Truth or Consequences"></option>
-    <option value="Trap the Trespassers"></option>
-    <option value="Mob Verdict"></option>
-    <option value="Elrond of the White Council"></option>
-    <option value="Cirdan the Shipwright"></option>
-  </datalist>
-
+  <div>
+    <div>
+      <label>How many players</label>
+      <input list="players" id="playersInput" />
+      <datalist id="players">
+        <option value="2"></option>
+        <option value="3"></option>
+        <option value="4"></option>
+        <option value="5"></option>
+      </datalist>
+    </div>
+  </div>
+  <div style="display: none" id="cardSelect">
+    <label>Pick a card:</label>
+    <input list="cards" id="cardInput" />
+    <datalist id="cards">
+      <option value="Truth or Consequences"></option>
+      <option value="Trap the Trespassers"></option>
+      <option value="Mob Verdict"></option>
+      <option value="Elrond of the White Council"></option>
+      <option value="Cirdan the Shipwright"></option>
+    </datalist>
+  </div>
   <div id="cardImageContainer">
     <img src="" alt="" id="cardImage" />
   </div>
+  <div id="playerVoteBox"></div>
 </body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#playersInput").change(function () {
+      var selVal = $(this).val();
+      $("#playerVoteBox").html("");
+      if (selVal > 0) {
+        for (var i = 1; i <= selVal; i++) {
+          console.log(i, "testing");
+          $("#playerVoteBox").append(
+            '<input type="radio" id="option' +
+              [i] +
+              '" value="" /><label></label><input type="radio" id="option' +
+              [i] +
+              '" value="" /><label></label><br>'
+          );
+        }
+      }
+      $("#cardSelect").show();
+    });
+    document.getElementById("cardInput").addEventListener("input", function () {
+      var selectedCard = this.value.toLowerCase();
+      var cardImage = document.getElementById("cardImage");
+
+      switch (selectedCard) {
+        case "cirdan the shipwright":
+          cardImage.src = "../images/cirdan-the-shipwright.jpg";
+          option1.innerHTML = "testing";
+          break;
+        case "elrond of the white council":
+          cardImage.src = "../images/elrond-of-the-white-council.jpg";
+          break;
+        case "mob verdict":
+          cardImage.src = "../images/mob-verdict.jpg";
+          break;
+        case "trap the trespassers":
+          cardImage.src = "../images/trap-the-trespassers.jpg";
+          break;
+        case "truth or consequences":
+          cardImage.src = "../images/truth-or-consequences.jpg";
+          break;
+        default:
+          cardImage.src = "";
+          break;
+      }
+    });
+    document
+      .getElementById("playersInput")
+      .addEventListener("input", function () {
+        let numberOfPlayers = this.value;
+        console.log(numberOfPlayers);
+
+        switch (numberOfPlayers) {
+          case "2":
+            console.log("2 players");
+            break;
+          case "3":
+            console.log("3 players");
+            break;
+          case "4":
+            console.log("4 players");
+            break;
+          case "5":
+            console.log("5 players");
+            break;
+          default:
+            console.log("default");
+            break;
+        }
+      });
+  });
+</script>
