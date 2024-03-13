@@ -1,18 +1,7 @@
 <head> </head>
+<header>TheBallotBox</header>
 <body>
-  <div>
-    <div>
-      <label>How many players</label>
-      <input list="players" id="playersInput" />
-      <datalist id="players">
-        <option value="2"></option>
-        <option value="3"></option>
-        <option value="4"></option>
-        <option value="5"></option>
-      </datalist>
-    </div>
-  </div>
-  <div style="display: none" id="cardSelect">
+  <div id="cardSelect">
     <label>Pick a card:</label>
     <input list="cards" id="cardInput" />
     <datalist id="cards">
@@ -23,51 +12,69 @@
       <option value="Cirdan the Shipwright"></option>
     </datalist>
   </div>
+  <br />
   <div id="cardImageContainer">
-    <img src="" alt="" id="cardImage" />
+    <img src="" alt="" id="cardImage" style="max-width: 250px" />
   </div>
+  <br />
+  <div style="display: none" id="playersDiv">
+    <div>
+      <label>How many players</label>
+      <br />
+      <br />
+      <input list="players" id="playersInput" />
+      <datalist id="players">
+        <option value="2"></option>
+        <option value="3"></option>
+        <option value="4"></option>
+        <option value="5"></option>
+      </datalist>
+    </div>
+  </div>
+  <br />
   <div id="playerVoteBox"></div>
 </body>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
+  let numberOfPlayers = "";
   $(document).ready(function () {
-    $("#playersInput").change(function () {
-      var selVal = $(this).val();
-      $("#playerVoteBox").html("");
-      if (selVal > 0) {
-        for (var i = 1; i <= selVal; i++) {
-          console.log(i, "testing");
-          $("#playerVoteBox").append(
-            '<input type="radio" id="option' +
-              [i] +
-              '" value="" /><label></label><input type="radio" id="option' +
-              [i] +
-              '" value="" /><label></label><br>'
-          );
-        }
-      }
-      $("#cardSelect").show();
+    $("#cardInput").change(function () {
+      $("#playersDiv").show();
     });
+    let choices = "";
+    let option1 = "";
+    let option2 = "";
+
     document.getElementById("cardInput").addEventListener("input", function () {
       var selectedCard = this.value.toLowerCase();
       var cardImage = document.getElementById("cardImage");
-
       switch (selectedCard) {
         case "cirdan the shipwright":
           cardImage.src = "../images/cirdan-the-shipwright.jpg";
-          option1.innerHTML = "testing";
+          choices = "4";
+          option1 = "Player/Commander Name";
           break;
         case "elrond of the white council":
           cardImage.src = "../images/elrond-of-the-white-council.jpg";
+          choices = "2";
+          option1 = "Fellowship";
+          option2 = "Aid";
           break;
         case "mob verdict":
           cardImage.src = "../images/mob-verdict.jpg";
+          choices = "4";
+          option1 = "Player/Commander Name";
           break;
         case "trap the trespassers":
           cardImage.src = "../images/trap-the-trespassers.jpg";
+          choices = "4";
+          option1 = "Creature Name";
           break;
         case "truth or consequences":
           cardImage.src = "../images/truth-or-consequences.jpg";
+          choices = "2";
+          option1 = "Truth";
+          option2 = "Consequences";
           break;
         default:
           cardImage.src = "";
@@ -77,9 +84,7 @@
     document
       .getElementById("playersInput")
       .addEventListener("input", function () {
-        let numberOfPlayers = this.value;
-        console.log(numberOfPlayers);
-
+        numberOfPlayers = this.value;
         switch (numberOfPlayers) {
           case "2":
             console.log("2 players");
@@ -97,6 +102,57 @@
             console.log("default");
             break;
         }
+        $("#playerVoteBox").html("");
+        var selVal = $(this).val();
+        if (selVal > 0) {
+          if (choices == "2") {
+            for (var i = 1; i <= selVal; i++) {
+              $("#playerVoteBox").append(
+                "<fieldset id='box" +
+                  [i] +
+                  "' disabled='true'><label>Player " +
+                  [i] +
+                  '</label><br><input type="radio" name="option' +
+                  [i] +
+                  '" class="option' +
+                  [i] +
+                  '" value=""/><label>' +
+                  [option1] +
+                  '</label><input type="radio" name="option' +
+                  [i] +
+                  '" class="option' +
+                  [i] +
+                  ' value="" /><label>' +
+                  [option2] +
+                  "</label><br><button class='box" +
+                  [i] +
+                  "button' type='button' onclick='next(this)'>Next</button></fieldset><br>"
+              );
+            }
+          } else if (choices == "4") {
+            for (var i = 1; i <= selVal; i++) {
+              $("#playerVoteBox").append(
+                "<fieldset disabled='true'><label>Player " +
+                  [i] +
+                  '</label><br><input type="text" id="option1" value=""/><label>' +
+                  [option1] +
+                  "</label><br><button type='button'>Next</button></fieldset><br>"
+              );
+            }
+          }
+        }
+        $(document).ready(function () {
+          $("#box1").removeAttr("disabled");
+        });
       });
   });
+  function next(el) {
+    console.log(numberOfPlayers);
+    if (el.className == "box1button") {
+      box1 = document.getElementById("box1");
+      box2 = document.getElementById("box2");
+      box2.removeAttribute("disabled");
+      box1.setAttribute("disabled", "true");
+    }
+  }
 </script>
