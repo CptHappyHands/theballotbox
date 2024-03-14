@@ -1,38 +1,40 @@
-<head> </head>
+<head>
+  <link rel="stylesheet" href="style.css" />
+</head>
 <header>TheBallotBox</header>
 <body>
-  <div id="cardSelect">
-    <label>Pick a card:</label>
-    <input list="cards" id="cardInput" />
-    <datalist id="cards">
-      <option value="Truth or Consequences"></option>
-      <option value="Trap the Trespassers"></option>
-      <option value="Mob Verdict"></option>
-      <option value="Elrond of the White Council"></option>
-      <option value="Cirdan the Shipwright"></option>
-    </datalist>
-  </div>
-  <br />
-  <div id="cardImageContainer">
-    <img src="" alt="" id="cardImage" style="max-width: 250px" />
-  </div>
-  <br />
-  <div style="display: none" id="playersDiv">
-    <div>
-      <label>How many players</label>
-      <br />
-      <br />
-      <input list="players" id="playersInput" />
-      <datalist id="players">
-        <option value="2"></option>
-        <option value="3"></option>
-        <option value="4"></option>
-        <option value="5"></option>
+  <div id="voteContainer">
+    <div id="cardSelect">
+      <label>Pick a card:</label>
+      <input list="cards" id="cardInput" />
+      <datalist id="cards">
+        <option value="Truth or Consequences"></option>
+        <option value="Trap the Trespassers"></option>
+        <option value="Mob Verdict"></option>
+        <option value="Elrond of the White Council"></option>
+        <option value="Cirdan the Shipwright"></option>
       </datalist>
+      <div id="cardImageContainer">
+        <img src="" alt="" id="cardImage" />
+      </div>
     </div>
+    <div style="display: none" id="playersDiv">
+      <div>
+        <label>How many players</label>
+        <input list="players" id="playersInput" />
+        <datalist id="players">
+          <option value="2"></option>
+          <option value="3"></option>
+          <option value="4"></option>
+          <option value="5"></option>
+        </datalist>
+      </div>
+    </div>
+    <div id="playerVoteBox"></div>
+    <div id="playerVoteSubmit"></div>
   </div>
-  <br />
-  <div id="playerVoteBox"></div>
+
+  <div id="playerVoteTally"></div>
 </body>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type="text/javascript">
@@ -75,6 +77,8 @@
           choices = "2";
           option1 = "Truth";
           option2 = "Consequences";
+          result1 = "Player 1 draws a card";
+          result2 = "Add 3 damage to be done to random opponent of Player";
           break;
         default:
           cardImage.src = "";
@@ -108,7 +112,7 @@
           if (choices == "2") {
             for (var i = 1; i <= selVal; i++) {
               $("#playerVoteBox").append(
-                "<fieldset id='box" +
+                "<form id='ballot'><fieldset id='box" +
                   [i] +
                   "' disabled='true'><label>Player " +
                   [i] +
@@ -116,27 +120,39 @@
                   [i] +
                   '" class="option' +
                   [i] +
-                  '" value=""/><label>' +
+                  '" value="' +
+                  [option1] +
+                  '" /><label class="radioOption">' +
                   [option1] +
                   '</label><input type="radio" name="option' +
                   [i] +
                   '" class="option' +
                   [i] +
-                  ' value="" /><label>' +
+                  '" value="' +
+                  [option2] +
+                  '" /><label class="radioOption">' +
                   [option2] +
                   "</label><br><button class='box" +
                   [i] +
-                  "button' type='button' onclick='next(this)'>Next</button></fieldset><br>"
+                  "button' type='button' onclick='next(this)'>Next</button></fieldset></form><br>"
               );
             }
           } else if (choices == "4") {
             for (var i = 1; i <= selVal; i++) {
               $("#playerVoteBox").append(
-                "<fieldset disabled='true'><label>Player " +
+                "<form id='ballot'><fieldset id='box" +
                   [i] +
-                  '</label><br><input type="text" id="option1" value=""/><label>' +
+                  "' disabled='true'><label>Player " +
+                  [i] +
+                  '</label><br><input type="text" id="option1" name="option' +
+                  [i] +
+                  '"class="option' +
+                  [i] +
+                  '"value=""/><label>' +
                   [option1] +
-                  "</label><br><button type='button'>Next</button></fieldset><br>"
+                  "</label><br><button class='box" +
+                  [i] +
+                  "button' type='button' onclick='nextTextBox(this)'>Next</button></fieldset></form><br>"
               );
             }
           }
@@ -146,13 +162,78 @@
         });
       });
   });
+  let x = 1;
+
   function next(el) {
-    console.log(numberOfPlayers);
-    if (el.className == "box1button") {
-      box1 = document.getElementById("box1");
-      box2 = document.getElementById("box2");
-      box2.removeAttribute("disabled");
-      box1.setAttribute("disabled", "true");
+    let y = $('input[name="option' + [x] + '"]:checked').val();
+    console.log(y, "line 151");
+    if (y != null) {
+      if (el.className.includes(x) && x < numberOfPlayers) {
+        boxOld = document.getElementById("box" + [x]);
+        boxNext = document.getElementById("box" + [x + 1]);
+        boxNext.removeAttribute("disabled");
+        boxOld.setAttribute("disabled", "true");
+        x++;
+      } else if (x == numberOfPlayers) {
+        boxNext.setAttribute("disabled", "true");
+        $("#playerVoteBox").append(
+          "<button onclick='seeResults()'>See Results</button>"
+        );
+        console.log("worked");
+      } else {
+        console.log("failed");
+      }
+    } else {
+      console.log("oopsie doodles");
+      return;
     }
+  }
+
+  function nextTextBox(el) {
+    console.log(numberOfPlayers, "line 193");
+    let y = $('input[name="option' + [x] + '"]').val();
+    console.log(y, "line 194");
+    if (y != "") {
+      if (el.className.includes(x) && x < numberOfPlayers) {
+        boxOld = document.getElementById("box" + [x]);
+        boxNext = document.getElementById("box" + [x + 1]);
+        boxNext.removeAttribute("disabled");
+        boxOld.setAttribute("disabled", "true");
+        x++;
+      } else if (x == numberOfPlayers) {
+        boxNext.setAttribute("disabled", "true");
+        $("#playerVoteBox").append(
+          "<button onclick='seeResultsText()'>See Results</button>"
+        );
+        console.log("worked");
+      } else {
+        console.log("failed");
+      }
+    } else {
+      console.log("oopsie doodles");
+      return;
+    }
+  }
+
+  function seeResults() {
+    let results = [];
+    for (let i = 1; i <= numberOfPlayers; i++) {
+      results.push($('input[name="option' + [i] + '"]:checked').val());
+      $("#playerVoteTally").append(
+        "<div>Player " + [i] + " voted for " + results[i - 1] + "</div>"
+      );
+    }
+    console.log(results);
+  }
+
+  function seeResultsText() {
+    let results = [];
+    for (let i = 1; i <= numberOfPlayers; i++) {
+      results.push($('input[name="option' + [i] + '"]').val());
+      $("#playerVoteTally").append(
+        "<div>Player " + [i] + " voted for " + results[i - 1] + "</div>"
+      );
+    }
+    console.log(results);
   }
 </script>

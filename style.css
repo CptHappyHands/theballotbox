@@ -1,0 +1,91 @@
+body {
+  padding: 10px;
+}
+
+header {
+  text-align: center;
+  padding: 20px;
+  font-size: 30px;
+}
+
+#voteContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+#cardSelect {
+  font-size: 40px;
+  width: 33%;
+  padding: 5px;
+  margin-bottom: 20px;
+  @media (min-width: 600px) {
+    width: 80%;
+  }
+}
+
+#cardInput {
+  width: 80%;
+  height: 50px;
+  font-size: 40px;
+}
+
+#cardImageContainer {
+  margin-top: 20px;
+}
+
+#playersDiv {
+  font-size: 40px;
+  width: 33%;
+  @media (min-width: 600px) {
+    width: 80%;
+  }
+}
+
+#playersInput {
+  width: 40%;
+  height: 50px;
+  font-size: 40px;
+  margin: 20px;
+  border: 3px solid red;
+}
+
+#playerVoteBox {
+  font-size: 40px;
+  width: 33%;
+  @media (min-width: 600px) {
+    width: 80%;
+  }
+}
+
+#playerVoteTally {
+  text-align: center;
+  font-size: 30px;
+}
+
+button {
+  width: 20%;
+  font-size: 35px;
+  margin: 10px;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+/* Style the label as boxes */
+.radioOption {
+  display: inline-block;
+  width: fit-content; /* Adjust width as needed */
+  height: 50px; /* Adjust height as needed */
+  background-color: grey;
+  border: 1px solid #999;
+  margin: 10px; /* Adjust spacing between boxes */
+  cursor: pointer;
+  padding: 10px;
+}
+
+/* Style the label when the radio button is checked */
+input[type="radio"]:checked + .radio-box {
+  background-color: #007bff; /* Change color as needed */
+  color: #fff; /* Change text color as needed */
+}
